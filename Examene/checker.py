@@ -30,8 +30,7 @@ SECURITY_HEADERS = [
 
 def build_url(host, path):
     """Returnează o adresă completă, de exemplu https://example.com/login."""
-     return f"https://{host}/{path.lstrip('/')}"
-   pass
+    return f"https://{host}/{path.lstrip('/')}"
 
 
 
@@ -42,8 +41,7 @@ def is_https(url):
         return True
     else:   
         return False  
-          
-    new_func()
+        
 
 
 
@@ -70,8 +68,23 @@ def check_site(url):
 def scan_sites():
     """Verifică toate site-urile din SITES, afișează-le pe cele care merg și un rezumat."""
 
+    working_sites = 0
 
-    pass
+    for url in SITES:
+        try:
+            response = requests.get(url, timeout=10)
+        except requests.RequestException:
+            continue
+
+        if response.ok:
+            working_sites += 1
+            print(f"Site funcțional: {url} (status {response.status_code})")
+
+    failed_sites = len(SITES) - working_sites
+    print(
+        f"Rezumat: {working_sites}/{len(SITES)} site-uri funcționale; "
+        f"{failed_sites} indisponibile."
+    )
 
 
 def check_headers(url):
@@ -107,7 +120,5 @@ def retry_check(url, attempts=3):
         "status": None,
         "attempts": attempts
     }
-
-
 
 
